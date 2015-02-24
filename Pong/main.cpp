@@ -12,6 +12,7 @@
 double posIzq=0, posDer=0;//posicion x de raquetas
 double xBola=0, yBola=2.8;//posicion pelota
 double cambioX=-0.1, cambioY=-0.1;//traslacion pelota
+bool pausa=true;
 
 void init(void)
 {
@@ -25,11 +26,15 @@ void mySpecialKey(int key, int x, int y){
     switch (key)
     {
         case GLUT_KEY_UP:
-            posDer<=2.5 ? posDer+=.1 : posDer-=.1;
+            if (!pausa) {
+                posDer<=2.5 ? posDer+=.1 : posDer-=.1;
+            }
             break;
         
         case GLUT_KEY_DOWN:
-            posDer>=-2.5 ? posDer-=.1 : posDer+=.1;
+            if (!pausa) {
+                posDer>=-2.5 ? posDer-=.1 : posDer+=.1;
+            }
             break;
             
         default:
@@ -45,12 +50,21 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
     {
         case 'w':
         case 'W':
-            posIzq<=2.5 ? posIzq+=.2 : posIzq-=.2;
+            if (!pausa) {
+                posIzq<=2.5 ? posIzq+=.2 : posIzq-=.2;
+            }
             break;
             
         case 's':
         case 'S':
-            posIzq>=-2.5 ? posIzq-=.2 : posIzq+=.2;
+            if (!pausa) {
+                posIzq>=-2.5 ? posIzq-=.2 : posIzq+=.2;
+            }
+            break;
+            
+        case 'p':
+        case 'P':
+            pausa=!pausa;
             break;
             
         default:
@@ -61,17 +75,19 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
 
 void timer (int v)
 {
-    if (xBola<-2.8 || xBola>2.8) {
-        cambioX=-cambioX;
+    if (!pausa) {
+        if (xBola<-2.8 || xBola>2.8) {
+            cambioX=-cambioX;
+        }
+        
+        if (yBola<-2.8 || yBola>2.8) {
+            cambioY=-cambioY;
+        }
+        
+        yBola+=cambioY;
+        xBola+=cambioX;
+        glutPostRedisplay();
     }
-    
-    if (yBola<-2.8 || yBola>2.8) {
-        cambioY=-cambioY;
-    }
-    
-    yBola+=cambioY;
-    xBola+=cambioX;
-    glutPostRedisplay();
     glutTimerFunc(50,timer,1);
 }
 
