@@ -75,8 +75,22 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
             
         case 'i':
         case 'I':
-            inicio=!inicio;
-            pausa=false;
+            if(!inicio){
+                pausa=false;
+            }
+            inicio=true;
+            break;
+            
+        case 'r':
+        case 'R':
+            inicio=false;
+            pausa=true;
+            posIzq=posDer=xBola=golesDer=golesIzq=0,yBola=2.8;//reinicia valores
+            break;
+            
+        case 27:
+            exit(-1);
+            //terminate the program
             break;
             
         default:
@@ -130,13 +144,13 @@ void timer (int v)
                 golesDer++;
                 yBola=2.8;
                 xBola=0;
-                posIzq=posDer=0;
+                //posIzq=posDer=0;
             }
             if (xBola<-3.3){
                 golesIzq++;
                 yBola=2.8;
                 xBola=0;
-                posIzq=posDer=0;
+                //posIzq=posDer=0;
             }
             cambioX=-cambioX;
         }
@@ -153,6 +167,45 @@ void timer (int v)
     glutTimerFunc(50,timer,1);
 }
 
+void onMenu(int opcion) {
+    switch(opcion) {
+        case 1:
+            inicio=true;
+            pausa=false;
+            break;
+        case 2:
+            inicio=false;
+            pausa=true;
+            posIzq=posDer=xBola=golesDer=golesIzq=0,yBola=2.8;//reinicia valores
+            break;
+        case 3:
+            if(inicio){
+                pausa=!pausa;
+            }
+            break;
+        case 4: // Blanco 3
+            exit(-1);
+            //terminate the program
+            break;
+        case 5:
+            break;
+    }
+    glutPostRedisplay();
+}
+
+
+void creacionMenu(void) {
+    int menuPrincipal, autores;
+    menuPrincipal = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Iniciar", 1);
+    glutAddMenuEntry("Reiniciar", 2);
+    glutAddMenuEntry("Pausa", 3);
+    glutAddMenuEntry("Salir", 4);
+    glutAddMenuEntry("Roberto Mtz", 5);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+
 void display(void)
 {
     glClear (GL_COLOR_BUFFER_BIT);
@@ -164,6 +217,8 @@ void display(void)
     
     drawText(1.25, 2,toString(golesIzq), GLUT_BITMAP_9_BY_15);
     drawText(-1.25, 2,toString(golesDer), GLUT_BITMAP_9_BY_15);
+    
+    drawText(-2.75, -2.75,"Roberto Mtz A01190757", GLUT_BITMAP_9_BY_15);
     
     glPushMatrix();
     glTranslatef(-3,posIzq,0);
@@ -207,6 +262,7 @@ int main(int argc, char** argv)
     glutKeyboardFunc(myKey);
     glutSpecialFunc(mySpecialKey);
     glutTimerFunc(100, timer, 1);
+    creacionMenu( );
     glutMainLoop();
     return 0;
 }
