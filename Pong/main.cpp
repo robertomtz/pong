@@ -113,6 +113,16 @@ std::string toString(int value) {
 void timer (int v)
 {
     if (!pausa) {
+        
+        
+        if ((posIzq+.5>yBola) && (posIzq-.5<yBola) && (xBola<-2.8)) {
+            cambioX=-cambioX;
+        }
+        
+        if ((posDer+.5>yBola) && (posDer-.5<yBola) && (xBola>2.8)) {
+            cambioX=-cambioX;
+        }
+        
         if (xBola<-3.3 || xBola>3.3) {
             if (xBola>3.3){
                 golesDer++;
