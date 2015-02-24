@@ -12,7 +12,7 @@
 
 double posIzq=0, posDer=0;//posicion x de raquetas
 double xBola=0, yBola=2.8;//posicion pelota
-double cambioX=-0.1, cambioY=-0.1;//traslacion pelota
+double cambioX=-0.15, cambioY=-0.13;//traslacion pelota
 double golesDer=0, golesIzq=0;
 
 bool pausa=true;
@@ -31,13 +31,13 @@ void mySpecialKey(int key, int x, int y){
     {
         case GLUT_KEY_UP:
             if (!pausa) {
-                posDer<=2.5 ? posDer+=.1 : posDer-=.1;
+                posDer<=2.5 ? posDer+=.2 : posDer-=.2;
             }
             break;
         
         case GLUT_KEY_DOWN:
             if (!pausa) {
-                posDer>=-2.5 ? posDer-=.1 : posDer+=.1;
+                posDer>=-2.5 ? posDer-=.2 : posDer+=.2;
             }
             break;
             
@@ -117,10 +117,12 @@ void timer (int v)
         
         if ((posIzq+.5>yBola) && (posIzq-.5<yBola) && (xBola<-2.8)) {
             cambioX=-cambioX;
+            xBola=-2.8;
         }
         
         if ((posDer+.5>yBola) && (posDer-.5<yBola) && (xBola>2.8)) {
             cambioX=-cambioX;
+            xBola=2.8;
         }
         
         if (xBola<-3.3 || xBola>3.3) {
@@ -128,11 +130,13 @@ void timer (int v)
                 golesDer++;
                 yBola=2.8;
                 xBola=0;
+                posIzq=posDer=0;
             }
             if (xBola<-3.3){
                 golesIzq++;
                 yBola=2.8;
                 xBola=0;
+                posIzq=posDer=0;
             }
             cambioX=-cambioX;
         }
@@ -158,8 +162,8 @@ void display(void)
     glScalef (1.0, 1.0, 1.0);
     
     
-    drawText(1.25, 2,toString(golesDer), GLUT_BITMAP_9_BY_15);
-    drawText(-1.25, 2,toString(golesIzq), GLUT_BITMAP_9_BY_15);
+    drawText(1.25, 2,toString(golesIzq), GLUT_BITMAP_9_BY_15);
+    drawText(-1.25, 2,toString(golesDer), GLUT_BITMAP_9_BY_15);
     
     glPushMatrix();
     glTranslatef(-3,posIzq,0);
