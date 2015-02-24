@@ -9,7 +9,9 @@
 #include <iostream>
 #include <GLUT/glut.h>
 
-double posIzq=0, posDer=0;
+double posIzq=0, posDer=0;//posicion x de raquetas
+double xBola=0, yBola=2.8;//posicion pelota
+double cambioX=-0.1, cambioY=-0.1;//traslacion pelota
 
 void init(void)
 {
@@ -43,12 +45,12 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
     {
         case 'w':
         case 'W':
-            posIzq<=2.5 ? posIzq+=.1 : posIzq-=.1;
+            posIzq<=2.5 ? posIzq+=.2 : posIzq-=.2;
             break;
             
         case 's':
         case 'S':
-            posIzq>=-2.5 ? posIzq-=.1 : posIzq+=.1;
+            posIzq>=-2.5 ? posIzq-=.2 : posIzq+=.2;
             break;
             
         default:
@@ -59,6 +61,18 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
 
 void timer (int v)
 {
+    if (xBola<-2.8 || xBola>2.8) {
+        cambioX=-cambioX;
+    }
+    
+    if (yBola<-2.8 || yBola>2.8) {
+        cambioY=-cambioY;
+    }
+    
+    yBola+=cambioY;
+    xBola+=cambioX;
+    glutPostRedisplay();
+    glutTimerFunc(50,timer,1);
 }
 
 void display(void)
@@ -79,6 +93,11 @@ void display(void)
     glTranslatef(3,posDer ,0);
     glScaled(.2, 2, .2);
     glutSolidCube(0.5);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(xBola,yBola ,0);
+    glutSolidSphere(.14,16,16);
     glPopMatrix();
     
     glutSwapBuffers();
@@ -105,7 +124,7 @@ int main(int argc, char** argv)
     glutReshapeFunc(reshape);
     glutKeyboardFunc(myKey);
     glutSpecialFunc(mySpecialKey);
-    glutTimerFunc(300, timer, 1);
+    glutTimerFunc(100, timer, 1);
     glutMainLoop();
     return 0;
 }
