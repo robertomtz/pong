@@ -13,6 +13,7 @@ double posIzq=0, posDer=0;//posicion x de raquetas
 double xBola=0, yBola=2.8;//posicion pelota
 double cambioX=-0.1, cambioY=-0.1;//traslacion pelota
 bool pausa=true;
+bool inicio=false;
 
 void init(void)
 {
@@ -64,7 +65,15 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
             
         case 'p':
         case 'P':
-            pausa=!pausa;
+            if(inicio){
+                pausa=!pausa;
+            }
+            break;
+            
+        case 'i':
+        case 'I':
+            inicio=!inicio;
+            pausa=false;
             break;
             
         default:
