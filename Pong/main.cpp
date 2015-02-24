@@ -8,10 +8,13 @@
 
 #include <iostream>
 #include <GLUT/glut.h>
+#include <sstream>
 
 double posIzq=0, posDer=0;//posicion x de raquetas
 double xBola=0, yBola=2.8;//posicion pelota
 double cambioX=-0.1, cambioY=-0.1;//traslacion pelota
+double golesDer=0, golesIzq=0;
+
 bool pausa=true;
 bool inicio=false;
 
@@ -82,10 +85,45 @@ void myKey(unsigned char theKey, int mouseX, int mouseY)
     glutPostRedisplay();
 }
 
+
+void drawText(float x, float y, std::string text, void* font) {
+    //glMatrixMode(GL_MODELVIEW);
+    glRasterPos3f(x, y, 0);
+    for (std::string::iterator i = text.begin(); i != text.end(); ++i)
+    {
+        //glPushMatrix();
+        //glScaled(1, 12.5, 0);
+        char c = *i;
+        //glutStrokeCharacter(GLUT_STROKE_ROMAN, c);
+        glutBitmapCharacter(font, c);
+        //glPopMatrix();
+    }
+}
+
+
+
+std::string toString(int value) {
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
+}
+
+
+
 void timer (int v)
 {
     if (!pausa) {
-        if (xBola<-2.8 || xBola>2.8) {
+        if (xBola<-3.3 || xBola>3.3) {
+            if (xBola>3.3){
+                golesDer++;
+                yBola=2.8;
+                xBola=0;
+            }
+            if (xBola<-3.3){
+                golesIzq++;
+                yBola=2.8;
+                xBola=0;
+            }
             cambioX=-cambioX;
         }
         
@@ -95,6 +133,7 @@ void timer (int v)
         
         yBola+=cambioY;
         xBola+=cambioX;
+        
         glutPostRedisplay();
     }
     glutTimerFunc(50,timer,1);
@@ -107,6 +146,10 @@ void display(void)
     glLoadIdentity ();
     gluLookAt (0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     glScalef (1.0, 1.0, 1.0);
+    
+    
+    drawText(1.25, 2,toString(golesDer), GLUT_BITMAP_9_BY_15);
+    drawText(-1.25, 2,toString(golesIzq), GLUT_BITMAP_9_BY_15);
     
     glPushMatrix();
     glTranslatef(-3,posIzq,0);
