@@ -129,12 +129,12 @@ void timer (int v)
     if (!pausa) {
         
         
-        if ((posIzq+.5>yBola) && (posIzq-.5<yBola) && (xBola<-2.8)) {
+        if ((posIzq+.3>yBola) && (posIzq-.3<yBola) && (xBola<-2.8)) {
             cambioX=-cambioX;
             xBola=-2.8;
         }
         
-        if ((posDer+.5>yBola) && (posDer-.5<yBola) && (xBola>2.8)) {
+        if ((posDer+.3>yBola) && (posDer-.3<yBola) && (xBola>2.8)) {
             cambioX=-cambioX;
             xBola=2.8;
         }
@@ -227,14 +227,38 @@ void display(void)
     glPopMatrix();
     
     glPushMatrix();
-    glTranslatef(3,posDer ,0);
-    glScaled(.2, 2, .2);
+    glTranslatef(2.9,0 ,0);
+    glScaled(.02, 12, .02);
+    glutSolidCube(0.5);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-2.9,0 ,0);
+    glScaled(.02, 12, .02);
+    glutSolidCube(0.5);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(.01,0 ,0);
+    glScaled(.02, 12, .02);
     glutSolidCube(0.5);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(xBola,yBola ,0);
     glutSolidSphere(.14,16,16);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-3,posIzq,0);
+    glScaled(.2, 2, .2);
+    glutSolidCube(0.5);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(3,posDer ,0);
+    glScaled(.2, 2, .2);
+    glutSolidCube(0.5);
     glPopMatrix();
     
     glutSwapBuffers();
